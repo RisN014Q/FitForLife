@@ -1,0 +1,145 @@
+
+/* Global Styles */
+body { 
+  margin: 0; /* Remove default margin */
+  font-family: Arial, sans-serif; /* Set page font */
+  background: #f9f9f9; /* Light gray background */
+}
+
+/* Header / Top Bar */
+header { 
+  display: flex; /* Align logo/menu/search in a row */
+  justify-content: space-between; /* Space out items */
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+
+.menu-icon, .search-icon { 
+  font-size: 24px; /* Make icons bigger */
+  cursor: pointer; /* Pointer when hovering */
+}
+
+.logo { 
+  font-weight: bold; 
+  font-size: 1.2rem;
+}
+
+/* Side Menu (Slide Out) */
+.side-menu { 
+  height: 100%;
+  width: 0; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border-right: 1px solid #ccc;
+  overflow-x: hidden;
+  transition: 0.3s; /* Smooth open/close */
+  padding-top: 60px;
+}
+
+.side-menu a { 
+  padding: 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+  display: block;
+}
+
+.side-menu a:hover { 
+  background-color: #f0f0f0;
+}
+
+/* Main Content */
+.container { 
+  text-align: center;
+  padding: 20px;
+}
+
+/* Trainer's picture box */
+.trainer-pic { 
+  width: 200px;
+  height: 200px;
+  background: #ddd;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Mission Statement box */
+.mission { 
+  background: white;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Reviews Page Layout */
+.picture-grid { 
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.picture-box { 
+  width: 45%;
+  height: 150px;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.testimonials { 
+  background: white;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Forms (Contact Page) */
+form { 
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin: auto;
+}
+
+input, textarea { 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button { 
+  background: #1e90ff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover { 
+  background: #007acc;
+}
+
+/* Footer */
+footer { 
+  text-align: center;
+  padding: 10px;
+  font-size: 0.8rem;
+  color: #666;
+}
