@@ -37,7 +37,7 @@ header {
   border-right: 1px solid #ccc;
   overflow-x: hidden;
   transition: 0.3s; /* Smooth open/close */
-  padding-top: 60px;
+  padding-top: 0px;
 }
 
 .side-menu a { 
@@ -142,4 +142,79 @@ footer {
   padding: 10px;
   font-size: 0.8rem;
   color: #666;
+}
+
+/* Responsive Design */
+
+/*Tablet layout*/
+@media (min-width: 600px) {
+  body {
+    background: lightblue;
+    font-size: 18px;
+  }
+
+  /*Place pictures side by side*/
+  .picture-grid {
+    flex-direction: row;
+    max-width: 600px;
+    margin: auto;
+  }
+
+  /*Make text boxes wider*/
+  .mission {
+    max-width: 500px;
+  }
+}
+
+/*Desktop layout*/
+@media (min-width: 1024px) {
+
+  body {
+    font-size: 20px;
+    background: lightyellow;
+  }
+
+  /*Keep side menu visible*/
+  .side-menu {
+    width: 200px !important;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    display: block;
+    border-right: 1px solid #ddd;
+    padding-top: 0px;
+    background: #fff;
+  }
+
+  .side-menu a:first-child {
+    display: none; /*Hides close option*/
+  }
+
+  /*Hide hamburger on desktop*/
+  .menu-icon {
+    display:none;
+  }
+
+  /*Keep header centered*/
+  header {
+    justify-content: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 20px;
+  }
+
+  /*Make trainer pic/mission statement side by side*/
+  .trainer-pic {
+    margin: 20px;
+    display: inline-flex;
+  }
+
+  .mission {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 400px;
+  }
 }

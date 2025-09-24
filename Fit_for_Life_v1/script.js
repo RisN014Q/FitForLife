@@ -54,5 +54,11 @@ links.forEach(link => {
 
 //Open/close menu
 
-function openMenu() { document.getElementById("menu").style.width = "200px"; }
-function closeMenu() { document.getElementById("menu").style.width = "0"; }
+function openMenu() { 
+  if (window.innerWidth < 1024) { //Controls menu on smaller screens
+  document.getElementById("menu").style.width = "200px"; }
+}
+function closeMenu() { 
+  if (window.innerWidth < 1024) { 
+  document.getElementById("menu").style.width = "0"; }
+}
