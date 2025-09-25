@@ -37,7 +37,7 @@ header {
   border-right: 1px solid #ccc;
   overflow-x: hidden;
   transition: 0.3s; /* Smooth open/close */
-  padding-top: 0px;
+  z-index: 1; /* Make sure menu is above content */
 }
 
 .side-menu a { 
@@ -51,6 +51,18 @@ header {
 .side-menu a:hover { 
   background-color: #f0f0f0;
 }
+
+.overlay { /*might replace with detect click event*/
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.3); /*dimmed background*/
+  display: none; /*hide the overlay by default*/
+  z-index: 0.5; /* make sure overlay is above content but below menu*/
+}
+
 
 /* Main Content */
 .container { 
@@ -144,27 +156,84 @@ footer {
   color: #666;
 }
 
-/* Responsive Design */
+/* Testing tablet methods */
+@media (min-width: 601px) and (max-width: 1023px) {
 
-/*Tablet layout*/
+body {
+  background: lightblue;
+  font-size: 18px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.trainer-pic, .mission {
+  flex: 1;
+  width: 45%;
+  margin: 10px;
+}
+
+.trainer-pic img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+.mission {
+  text-align: left;
+}
+
+.side-menu {
+  width: 250px;
+}
+
+.picture-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.picture-box {
+  flex: 1;
+  height: 200px;
+  max-width: 45%;
+  margin: 0 auto;
+}
+
+.testimonials {
+  max-width: 600px;
+}
+
+}
+
+/*Tablet layout
 @media (min-width: 600px) {
   body {
     background: lightblue;
     font-size: 18px;
   }
 
-  /*Place pictures side by side*/
+  /*Place pictures side by side
   .picture-grid {
     flex-direction: row;
     max-width: 600px;
     margin: auto;
   }
 
-  /*Make text boxes wider*/
+  /*Make text boxes wider
   .mission {
     max-width: 500px;
   }
-}
+}*/
 
 /*Desktop layout*/
 @media (min-width: 1024px) {

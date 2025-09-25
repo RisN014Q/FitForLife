@@ -22,7 +22,9 @@ const menuHTML = `
   <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
   <a href="schedule.html"><i class="fas fa-calendar"></i> Schedule</a>
   <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-</div>`;
+</div>
+
+<div id="overlay" class="overlay" onclick="closeMenu()"></div>`;
 
 // Footer
 const footerHTML = `
@@ -55,10 +57,12 @@ links.forEach(link => {
 //Open/close menu
 
 function openMenu() { 
-  if (window.innerWidth < 1024) { //Controls menu on smaller screens
-  document.getElementById("menu").style.width = "200px"; }
+  if (window.innerWidth < 1024) { //Mobile/tablet only
+  document.getElementById("menu").style.width = "200px";
+  document.getElementById("overlay").style.display = "block"; }
 }
 function closeMenu() { 
   if (window.innerWidth < 1024) { 
-  document.getElementById("menu").style.width = "0"; }
+  document.getElementById("menu").style.width = "0";
+  document.getElementById("overlay").style.display = "none"; }
 }
