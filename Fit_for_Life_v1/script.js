@@ -32,8 +32,6 @@ const footerHTML = `
   &copy; 2025 Fit for Life Personal Training
 </footer>`;
 
-// ----Spacer----
-
 // Insert HTML to page
 document.addEventListener("DOMContentLoaded", function() {
     document.body.insertAdjacentHTML("afterbegin", headerHTML + menuHTML); // Adds header/menu to top
@@ -59,10 +57,12 @@ links.forEach(link => {
 function openMenu() { 
   if (window.innerWidth < 1024) { //Mobile/tablet only
   document.getElementById("menu").style.width = "200px";
-  document.getElementById("overlay").style.display = "block"; }
+  document.getElementById("overlay").style.display = "block";
+  document.addEventListener("click", handleOutsideClick);}
 }
 function closeMenu() { 
   if (window.innerWidth < 1024) { 
   document.getElementById("menu").style.width = "0";
-  document.getElementById("overlay").style.display = "none"; }
+  document.getElementById("overlay").style.display = "none";
+  document.removeEventListener("click", handleOutsideClick);}
 }

@@ -52,13 +52,13 @@ header {
   background-color: #f0f0f0;
 }
 
-.overlay { /*might replace with detect click event*/
+.overlay { 
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0,0,0,0.3); /*dimmed background*/
+  background: rgba(0,0,0,0.25); /*dimmed background*/
   display: none; /*hide the overlay by default*/
   z-index: 0.5; /* make sure overlay is above content but below menu*/
 }
