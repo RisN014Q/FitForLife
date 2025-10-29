@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main> <!-- Main Page Content -->
+    <div class="container">
+      <h2>Payment</h2>
+
+      <!-- Summary (trainer + scheduled time) -->
+      <div class="payment-summary">
+        <div><strong>Trainer:</strong> <span id="trainerName">—</span></div>
+        <div><strong>Scheduled:</strong> <span id="scheduledTime">—</span></div>
+        <div><strong>Amount:</strong> <span id="amount">$50.00</span></div>
+      </div>
+
+      <!-- Payment card mockup -->
+      <div class="payment-card">
+        <form id="paymentForm" class="payment-form" novalidate>
+          <label for="cardName">Cardholder name</label>
+          <input id="cardName" name="cardName" type="text" placeholder="Full name" required>
+
+          <label for="cardNumber">Card number</label>
+          <input id="cardNumber" name="cardNumber" type="text" inputmode="numeric" placeholder="1234 5678 9012 3456" maxlength="19" required>
+
+          <div class="row">
+            <div class="col">
+              <label for="expiry">Expiry</label>
+              <input id="expiry" name="expiry" type="text" placeholder="MM/YY" maxlength="5" required>
+            </div>
+            <div class="col small">
+              <label for="cvv">CVV</label>
+              <input id="cvv" name="cvv" type="password" inputmode="numeric" placeholder="123" maxlength="4" required>
+            </div>
+          </div>
+
+          <label for="email">Email (receipt)</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com">
+
+          <div class="form-actions">
+            <button type="button" id="cancelBtn" class="btn ghost">Cancel</button>
+            <button type="submit" id="confirmBtn" class="btn primary">Confirm Payment</button>
+          </div>
+        </form>
+      </div>
+
+      <p class="note">This is a mock payment screen — no real payment information is collected.</p>
+    </div>
+  </main>
+
+<!-- JS Script -->
+<!-- Shared header/sidebar/footer -->
+<script src="script.js"></script>
+
+<script>
+// small script to prefill trainer and scheduled info from query params
+(function(){
+  const params = new URLSearchParams(location.search);
+  const trainerId = params.get('trainer');
+  const dateParam = params.get('date') || params.get('dates');
+
+  const trainers = {
+    '1': 'Josh',
+    '2': 'Andrew',
+    '3': 'Jamie'
+  };
+
+  const trainerNameEl = document.getElementById('trainerName');
+  const scheduledEl = document.getElementById('scheduledTime');
+  const amountEl = document.getElementById('amount');
+
+  if (trainerId) {
+    trainerNameEl.textContent = trainers[trainerId] || `Trainer ${trainerId}`;
+  } else {
+    trainerNameEl.textContent = 'Not specified';
+  }
+
+  if (dateParam) {
+    try {
+      // if dates encoded as JSON in query, try parse, else show raw
+      const decoded = decodeURIComponent(dateParam);
+      let display = decoded;
+      if ((decoded.startsWith('[') || decoded.startsWith('{')) ) {
+        const parsed = JSON.parse(decoded);
+        if (Array.isArray(parsed)) display = parsed.join(', ');
+        else display = JSON.stringify(parsed);
+      }
+      scheduledEl.textContent = display;
+    } catch (e) {
+      scheduledEl.textContent = dateParam;
+    }
+  } else {
+    scheduledEl.textContent = 'Not scheduled';
+  }
+
+  // optionally set amount based on trainer (mock)
+  if (trainerId === '2') amountEl.textContent = '$65.00';
+  else amountEl.textContent = '$50.00';
+
+  // handle form submit (mock)
+  const form = document.getElementById('paymentForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    // basic validation
+    const name = document.getElementById('cardName').value.trim();
+    const card = document.getElementById('cardNumber').value.replace(/\s+/g,'');
+    if (!name || card.length < 12) {
+      alert('Please enter a valid name and card number (mock validation).');
+      return;
+    }
+    // show a mock confirmation
+    const trainer = trainerNameEl.textContent;
+    const scheduled = scheduledEl.textContent;
+    alert(`Payment (mock) successful for ${trainer} on ${scheduled}.\nThank you!`);
+    // redirect to a thank-you or confirmation page if desired
+    // location.href = 'index.html';
+  });
+
+  document.getElementById('cancelBtn').addEventListener('click', () => { history.back(); });
+})();
+</script>
+
+</body>
+</html>

@@ -22,6 +22,8 @@ const menuHTML = `
   <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
   <a href="booking.html"><i class="fas fa-calendar"></i> Booking</a>
   <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+  <!-- Payment link placed at the bottom -->
+  <a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>`;
@@ -47,7 +49,7 @@ const currentPage = window.location.pathname.split("/").pop();
 const links = document.querySelectorAll(".side-menu a");
 links.forEach(link => {
   if (link.getAttribute("href") === currentPage) {
-    link.style.fontweight = "bold"; //Highlights the current page
+    link.style.fontWeight = "bold"; // Highlights the current page
   }
 });
 
@@ -55,13 +57,14 @@ links.forEach(link => {
 //Open/close menu
 
 function openMenu() { 
-  if (window.innerWidth < 1024) { //Mobile/tablet only
-  document.getElementById("menu");
-  document.getElementById("overlay");
+  if (window.innerWidth < 1024) { // Mobile/tablet only
+    const menu = document.getElementById("menu");
+    const overlay = document.getElementById("overlay");
+    if (!menu || !overlay) return;
 
-  menu.style.width = "200px";
-  overlay.style.display = "block";
-  overlay.onclick = function() { closeMenu(); };
+    menu.style.width = "200px";
+    overlay.style.display = "block";
+    overlay.onclick = function() { closeMenu(); };
   }
 }
 function closeMenu() { 
@@ -89,7 +92,8 @@ function handleOutsideClick(event) {
   const params = new URLSearchParams(location.search);
   const trainerId = params.get('trainer') || '1'; // default trainer
   const trainerTitle = document.getElementById('trainer-title');
-  trainerTitle.textContent = `Calendar — Trainer ${trainerId}`;
+  trainerTitle.textContent = `Calendar`;
+  
 
   // example availability config per trainer (customize as needed)
   const availability = {
