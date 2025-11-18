@@ -64,9 +64,40 @@
 <script>
 // small script to prefill trainer and scheduled info from query params
 (function(){
-  const params = new URLSearchParams(location.search);
-  const trainerId = params.get('trainer');
-  const dateParam = params.get('date') || params.get('dates');
+  // Prefer booking payload from sessionStorage (set by calendar); fall back to query params
+  let trainerId = null;
+  let datesList = null;
+
+  try {
+    const stored = sessionStorage.getItem('bookingPayload');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      trainerId = parsed.trainer;
+      if (parsed.dates) datesList = parsed.dates;
+    }
+  } catch (e) {
+    console.warn('Could not read bookingPayload from sessionStorage', e);
+  }
+
+  if (!trainerId) {
+    const params = new URLSearchParams(location.search);
+    trainerId = params.get('trainer');
+    const dateParam = params.get('date') || params.get('dates');
+    if (dateParam) {
+      try {
+        const decoded = decodeURIComponent(dateParam);
+        if (decoded.startsWith('[') || decoded.startsWith('{')) {
+          const parsed = JSON.parse(decoded);
+          if (Array.isArray(parsed)) datesList = parsed;
+        } else {
+          // simple comma separated fallback
+          datesList = decoded.split(',').map(s => s.trim()).filter(Boolean);
+        }
+      } catch (e) {
+        datesList = [dateParam];
+      }
+    }
+  }
 
   const trainers = {
     '1': 'Josh',
@@ -84,20 +115,8 @@
     trainerNameEl.textContent = 'Not specified';
   }
 
-  if (dateParam) {
-    try {
-      // if dates encoded as JSON in query, try parse, else show raw
-      const decoded = decodeURIComponent(dateParam);
-      let display = decoded;
-      if ((decoded.startsWith('[') || decoded.startsWith('{')) ) {
-        const parsed = JSON.parse(decoded);
-        if (Array.isArray(parsed)) display = parsed.join(', ');
-        else display = JSON.stringify(parsed);
-      }
-      scheduledEl.textContent = display;
-    } catch (e) {
-      scheduledEl.textContent = dateParam;
-    }
+  if (datesList && datesList.length) {
+    scheduledEl.textContent = datesList.join(', ');
   } else {
     scheduledEl.textContent = 'Not scheduled';
   }
@@ -121,6 +140,8 @@
     const trainer = trainerNameEl.textContent;
     const scheduled = scheduledEl.textContent;
     alert(`Payment (mock) successful for ${trainer} on ${scheduled}.\nThank you!`);
+    // clear session storage payload now that payment is 'complete'
+    try { sessionStorage.removeItem('bookingPayload'); } catch (e) { /* ignore */ }
     // redirect to a thank-you or confirmation page if desired
     // location.href = 'index.html';
   });

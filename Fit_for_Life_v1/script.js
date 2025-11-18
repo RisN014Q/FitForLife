@@ -58,22 +58,13 @@ links.forEach(link => {
 
 function openMenu() { 
   if (window.innerWidth < 1024) { // Mobile/tablet only
-    const menu = document.getElementById("menu");
-    const overlay = document.getElementById("overlay");
-    if (!menu || !overlay) return;
-
-    menu.style.width = "200px";
-    overlay.style.display = "block";
-    overlay.onclick = function() { closeMenu(); };
+    // Toggle a class on the body — CSS handles menu width and overlay
+    document.body.classList.add('menu-open');
   }
 }
 function closeMenu() { 
   if (window.innerWidth < 1024) { 
-  const menu = document.getElementById("menu");
-  const overlay = document.getElementById("overlay");
-
-  menu.style.width = "0";
-  overlay.style.display = "none";
+    document.body.classList.remove('menu-open');
   }
 }
 
@@ -217,16 +208,21 @@ function handleOutsideClick(event) {
       alert('Please select one or more dates first.');
       return;
     }
-    // Example: show selected JSON and simulate sending
+    // Build a small booking payload and store in sessionStorage for the payment page
     const payload = {
       trainer: trainerId,
       dates: Array.from(selected).sort()
     };
-    console.log('Booking request payload:', payload);
-    // Replace with real POST or redirect as needed:
-    alert('Requested dates:\n' + payload.dates.join('\n'));
-    // Example redirect with query params to a confirmation page:
-    // location.href = 'booking-confirm.html?trainer=' + trainerId + '&dates=' + encodeURIComponent(JSON.stringify(payload.dates));
+    try {
+      sessionStorage.setItem('bookingPayload', JSON.stringify(payload));
+      // Redirect to payment page which will read sessionStorage.bookingPayload
+      location.href = 'payment.html';
+    } catch (e) {
+      // If storage fails, fallback to query-string (encode dates as JSON)
+      console.error('sessionStorage set failed, falling back to query:', e);
+      const qs = '?trainer=' + encodeURIComponent(trainerId) + '&dates=' + encodeURIComponent(JSON.stringify(payload.dates));
+      location.href = 'payment.html' + qs;
+    }
   });
 
   // initial render
