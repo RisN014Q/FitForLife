@@ -1,29 +1,29 @@
 
 // Shared Layout HTML
 
-// Header
+// Header and menu (uses Font Awesome 6 class names)
 const headerHTML = `
 <header>
   <!-- Menu button opens side menu -->
-  <span class="menu-icon" onclick="openMenu()"><i class="fas fa-bars"></i></span>
+  <span class="menu-icon" onclick="openMenu()"><i class="fa-solid fa-bars"></i></span>
   <!-- Logo text -->
   <span class="logo">Fit for Life</span>
   <!-- Search icon (not functional yet) -->
-  <span class="search-icon"><i class="fas fa-search"></i></span>
+  <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
 </header>`;
 
 // Side menu content
+/* Payment icon: 
+  <a href="payment.html"><i class="fa-solid fa-credit-card"></i> Payment</a> */
 const menuHTML = `
 <div id="menu" class="side-menu">
   <a href="javascript:void(0)" onclick="closeMenu()">✖ Close</a>
-  <a href="index.html"><i class="fas fa-home"></i> Home</a>
-  <a href="services.html"><i class="fas fa-dumbbell"></i> Services</a>
-  <a href="reviews.html"><i class="fas fa-image"></i> Reviews</a>
-  <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
-  <a href="booking.html"><i class="fas fa-calendar"></i> Booking</a>
-  <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
-  <!-- Payment link placed at the bottom -->
-  <a href="payment.html"><i class="fas fa-credit-card"></i> Payment</a>
+  <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+  <a href="services.html"><i class="fa-solid fa-dumbbell"></i> Services</a>
+  <a href="blog.html"><i class="fa-solid fa-blog"></i> Blog</a>
+  <a href="reviews.html"><i class="fa-solid fa-image"></i> Reviews</a>
+  <a href="booking.html"><i class="fa-solid fa-calendar-days"></i> Booking</a>
+  <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
 </div>
 
 <div id="overlay" class="overlay" onclick="closeMenu()"></div>`;
@@ -34,23 +34,67 @@ const footerHTML = `
   &copy; 2025 Fit for Life Personal Training
 </footer>`;
 
-// Insert HTML to page
+// Ensure Font Awesome is available (inject into <head> if not present)
+function ensureFontAwesome() {
+  try {
+    const exists = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some(l => {
+      const href = l.getAttribute('href') || '';
+      return href.includes('font-awesome') || href.includes('fontawesome') || href.includes('cdnjs.cloudflare.com/ajax/libs/font-awesome');
+    });
+    if (!exists) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    }
+  } catch (e) {
+    // fail silently if document.head not available
+    console.error('ensureFontAwesome error', e);
+  }
+}
+
+// Ensure a favicon is present; inject a favicon link to head if one isn't found
+function ensureFavicon() {
+  try {
+    const existing = Array.from(document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]'));
+    if (existing.length === 0) {
+      // Prefer .ico for max compatibility, fallback to SVG
+      const linkIco = document.createElement('link');
+      linkIco.rel = 'icon';
+      linkIco.type = 'image/x-icon';
+      linkIco.href = 'images/favicon.ico';
+      document.head.appendChild(linkIco);
+      // SVG fallback for modern browsers
+      const linkSvg = document.createElement('link');
+      linkSvg.rel = 'icon';
+      linkSvg.type = 'image/svg+xml';
+      linkSvg.href = 'images/favicon.svg';
+      document.head.appendChild(linkSvg);
+    }
+  } catch (e) {
+    console.error('ensureFavicon error', e);
+  }
+}
+
+// Insert HTML to page and then run post-insert setup
 document.addEventListener("DOMContentLoaded", function() {
+  ensureFavicon();
+  ensureFontAwesome();
     document.body.insertAdjacentHTML("afterbegin", headerHTML + menuHTML); // Adds header/menu to top
     document.body.insertAdjacentHTML("beforeend", footerHTML); // Adds footer to bottom
-});
 
-// Displays title to browser
-document.title = document.title + " | Fit for Life";
+    // Displays title to browser
+    document.title = document.title + " | Fit for Life";
 
-// Highlight current page in side menu
-
-const currentPage = window.location.pathname.split("/").pop();
-const links = document.querySelectorAll(".side-menu a");
-links.forEach(link => {
-  if (link.getAttribute("href") === currentPage) {
-    link.style.fontWeight = "bold"; // Highlights the current page
-  }
+    // Highlight current page in side menu (run after menu is inserted)
+    const currentPage = window.location.pathname.split("/").pop();
+    const links = document.querySelectorAll(".side-menu a");
+    links.forEach(link => {
+      if (link.getAttribute("href") === currentPage) {
+        link.style.fontWeight = "bold"; // Highlights the current page
+      }
+    });
 });
 
 
@@ -82,8 +126,17 @@ function handleOutsideClick(event) {
   // small client-side calendar with simple trainer availability rules
   const params = new URLSearchParams(location.search);
   const trainerId = params.get('trainer') || '1'; // default trainer
+  // Map trainer IDs to display names
+  const trainerNames = {
+    '1': "Josh",
+    '2': "Andrew"
+  };
   const trainerTitle = document.getElementById('trainer-title');
-  trainerTitle.textContent = `Calendar`;
+  if (trainerNames[trainerId]) {
+    trainerTitle.textContent = `${trainerNames[trainerId]}'s Availability`;
+  } else {
+    trainerTitle.textContent = `Trainer's Availability`;
+  }
   
 
   // example availability config per trainer (customize as needed)
@@ -175,11 +228,16 @@ function handleOutsideClick(event) {
     }
   }
 
+  function formatMMDDYYYY(iso) {
+    // iso: YYYY-MM-DD
+    const [y, m, d] = iso.split('-');
+    return `${m}/${d}/${y}`;
+  }
   function updateSelectedList() {
     selectedDatesEl.innerHTML = '';
     Array.from(selected).sort().forEach(iso => {
       const li = document.createElement('li');
-      li.textContent = iso;
+      li.textContent = formatMMDDYYYY(iso);
       selectedDatesEl.appendChild(li);
     });
   }
@@ -209,9 +267,10 @@ function handleOutsideClick(event) {
       return;
     }
     // Build a small booking payload and store in sessionStorage for the payment page
+    const formattedDates = Array.from(selected).sort().map(formatMMDDYYYY);
     const payload = {
       trainer: trainerId,
-      dates: Array.from(selected).sort()
+      dates: formattedDates
     };
     try {
       sessionStorage.setItem('bookingPayload', JSON.stringify(payload));
