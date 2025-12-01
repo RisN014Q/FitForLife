@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reviews</title>
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,7 +12,11 @@
 
   <main> <!-- Main Page Content -->
     <div class="container">
-      <h2>Payment</h2>
+      <div class="page-header">
+        <a href="calendar.html" class="btn">← Back</a>
+        <h2>Payment</h2>
+        <a href="#" class="btn invisible" aria-hidden="true">← Back</a>
+      </div>
 
       <!-- Summary (trainer + scheduled time) -->
       <div class="payment-summary">
@@ -128,10 +130,11 @@
   } else {
     scheduledEl.textContent = 'Not scheduled';
   }
-
-  // optionally set amount based on trainer (mock)
-  if (trainerId === '2') amountEl.textContent = '$65.00';
-  else amountEl.textContent = '$50.00';
+  // Dynamic pricing: $35 per selected date
+  const unitPrice = 35;
+  const count = Array.isArray(datesList) ? datesList.length : 0;
+  const total = unitPrice * count;
+  amountEl.textContent = (count > 0) ? `$${total.toFixed(2)}` : '$0.00';
 
   // handle form submit (mock)
   const form = document.getElementById('paymentForm');

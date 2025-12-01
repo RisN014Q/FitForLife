@@ -3,13 +3,11 @@
 
 // Header and menu (uses Font Awesome 6 class names)
 const headerHTML = `
-<header>
-  <!-- Menu button opens side menu -->
-  <span class="menu-icon" onclick="openMenu()"><i class="fa-solid fa-bars"></i></span>
-  <!-- Logo text -->
-  <span class="logo">Fit for Life</span>
-  <!-- Search icon (not functional yet) -->
-  <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+<header class="site-header">
+  <div class="hero-banner">
+    <!-- Menu button opens side menu -->
+    <span class="menu-icon" onclick="openMenu()"><i class="fa-solid fa-bars"></i></span>
+  </div>
 </header>`;
 
 // Side menu content
@@ -23,6 +21,7 @@ const menuHTML = `
   <a href="blog.html"><i class="fa-solid fa-blog"></i> Blog</a>
   <a href="reviews.html"><i class="fa-solid fa-image"></i> Reviews</a>
   <a href="booking.html"><i class="fa-solid fa-calendar-days"></i> Booking</a>
+  <a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a>
   <a href="contact.html"><i class="fa-solid fa-envelope"></i> Contact</a>
 </div>
 
@@ -152,6 +151,7 @@ function handleOutsideClick(event) {
   const prevBtn = document.getElementById('prevMonth');
   const nextBtn = document.getElementById('nextMonth');
   const selectedDatesEl = document.getElementById('selectedDates');
+  const selectedTotalEl = document.getElementById('selectedTotal');
   const clearBtn = document.getElementById('clearSelection');
   const submitBtn = document.getElementById('submitSelection');
 
@@ -240,6 +240,12 @@ function handleOutsideClick(event) {
       li.textContent = formatMMDDYYYY(iso);
       selectedDatesEl.appendChild(li);
     });
+    // Update total price ($35 per selected date)
+    if (selectedTotalEl) {
+      const unit = 35;
+      const total = unit * selected.size;
+      selectedTotalEl.textContent = `$${total.toFixed(2)}`;
+    }
   }
 
   prevBtn.addEventListener('click', () => {

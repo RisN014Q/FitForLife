@@ -1,21 +1,158 @@
+/* Blog Post Detail Centered Image Layout */
+.post-detail-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.post-detail-img {
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.post-detail-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+.post-detail-content {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+/* Blog List & Post Layout */
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.post {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 16px;
+  gap: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.18s;
+}
+.post:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.post-img img {
+  max-width: 110px;
+  border-radius: 6px;
+  display: block;
+}
+
+.post-content {
+  flex: 1;
+}
+
+@media (max-width: 700px) {
+  .post {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+  .post-img img {
+    max-width: 90px;
+    margin-bottom: 6px;
+  }
+  .post-content {
+    width: 100%;
+  }
+}
+.review-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 24px 0 18px;
+}
+
+.review-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 24px;
+}
+
+.review-row.center {
+  justify-content: center;
+}
+
+.review-img {
+  background: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 12px 12px 8px 12px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-img img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.review-img figcaption {
+  font-size: 0.98rem;
+  color: #444;
+  text-align: center;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .review-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+}
 /* Global Styles */
 body { 
   margin: 0; /* Remove default margin */
   font-family: Arial, sans-serif; /* Set page font */
-  background: #f9f9f9; /* Light gray background */
+  background: lightblue; /* Unified light blue background */
+}
+/* Hero image sources (replace with distinct files later) */
+:root {
+  /* Per-viewport hero images (add these files to /images) */
+  --hero-mobile: url('images/hero3.png');
+  --hero-tablet: url('images/hero2.png');
+  --hero-desktop: url('images/hero.png');
 }
 
 /* Header / Top Bar */
 header { 
-  display: flex; /* Align logo/menu/search in a row */
-  justify-content: space-between; /* Space out items */
-  align-items: center;
+  position: relative;
   background: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
+}
+ 
+/* Make images scale by default */
+img { 
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
-.menu-icon, .search-icon { 
+.menu-icon { 
   font-size: 24px; /* Make icons bigger */
   cursor: pointer; /* Pointer when hovering */
 }
@@ -51,17 +188,23 @@ header {
   background-color: #f0f0f0;
 }
 
-/*.overlay { 
+/* Overlay used when side menu is open on small screens */
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0,0,0,0.25); /*dimmed background
-  display: none; /*hide the overlay by default
-  z-index: 500; /* make sure overlay is above content but below menu
-}*/
+  background: rgba(0,0,0,0.28);
+  display: none; /* hidden by default */
+  z-index: 500; /* make sure overlay is above content but below menu */
+  transition: opacity 0.18s ease;
+  opacity: 0;
+}
 
+/* When body has menu-open the menu and overlay are visible */
+body.menu-open .overlay { display: block; opacity: 1; }
+body.menu-open .side-menu { width: 200px; }
 
 
 /* Main Content */
@@ -77,6 +220,10 @@ header {
   margin-top:16px;
 }
 
+/* Allow trainer cards to wrap and keep reasonable width on narrow/tablet screens */
+.trainers-row { flex-wrap: wrap; }
+.t-card { flex: 1 1 320px; }
+
 .t-card {
   flex: 1 1 0;
   background: white;
@@ -89,17 +236,22 @@ header {
   align-items: center;
 }
 
-/* Trainer's picture box */
-.trainer-pic { 
-  width: 200px;
-  height: 200px;
+/* Trainer's picture box - make fluid while preserving a square aspect */
+.trainer-pic {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1/1;
   background: #ddd;
   margin: 20px auto;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  overflow: hidden;
 }
+.trainer-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Support both markup patterns: <div class="trainer-pic"><img/></div> and <img class="trainer-pic"/> */
+img.trainer-pic { width: 100%; max-width: 220px; height: auto; object-fit: cover; display: block; border-radius: 8px; margin: 12px auto; }
 
 .t-card .mission {
   flex: 1 0 auto;
@@ -192,7 +344,7 @@ footer {
   color: #666;
 }
 
-.calendar-wrap { max-width:720px; margin:18px auto; background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
+.calendar-wrap, .cal-wrap { max-width:720px; margin:18px auto; background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
 .cal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
 .cal-header button { background:#0078d4; color:#fff; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; }
 .month-label { font-weight:600; }
@@ -225,8 +377,7 @@ footer {
 @media (min-width: 601px) and (max-width: 1023px) {
 
 body {
-  background: lightblue;
-  font-size: 18px;
+  font-size: 18px; /* retain tablet font sizing, background now global */
 }
 
 .container {
@@ -255,8 +406,68 @@ body {
   text-align: left;
 }
 
+  /* Tablet: use CSS Grid for predictable trainer card sizing and spacing */
+  .trainers-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    justify-items: center;
+    align-items: start;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 12px;
+  }
+
+  .t-card {
+    flex: 0 1 360px; /* don't shrink below ~360px on tablet */
+    max-width: 380px;
+    box-sizing: border-box;
+    margin: 10px;
+  }
+
+  /* Ensure image elements scale proportionally when used as <img class="trainer-pic"> */
+  img.trainer-pic {
+    width: 100%;
+    max-width: 280px;
+    /* Force square images on tablet for consistent layout */
+    aspect-ratio: 1/1;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin: 12px auto;
+  }
+
+  /* Also ensure the .trainer-pic container remains square if used as a wrapper */
+  .trainer-pic {
+    aspect-ratio: 1/1;
+    max-width: 280px;
+  }
+
+  .t-card .mission {
+    padding: 0 10px 12px;
+    max-width: 100%;
+    font-size: 0.98rem;
+  }
+
+/* On tablet behave like mobile: keep the side menu hidden by default and show via .menu-open */
 .side-menu {
-  width: 250px;
+  width: 0;
+}
+
+/* Ensure hamburger icon is visible on tablet */
+.menu-icon { display: inline-block; }
+
+/* Make trainer cards proportionate on tablet (grid items) */
+.t-card { width: 100%; max-width: 320px; box-sizing: border-box; }
+.trainer-pic, img.trainer-pic { max-width: 280px; margin: 12px auto; }
+
+/* Contact form: larger, more tappable controls on tablet */
+.container form { max-width: 560px; margin: 0 auto; }
+.container form input,
+.container form textarea,
+.container form button {
+  font-size: 1.05rem;
+  padding: 12px 14px;
 }
 
 .picture-grid {
@@ -280,32 +491,11 @@ body {
 
 }
 
-/*Tablet layout
-@media (min-width: 600px) {
-  body {
-    background: lightblue;
-    font-size: 18px;
-  }
-
-  /*Place pictures side by side
-  .picture-grid {
-    flex-direction: row;
-    max-width: 600px;
-    margin: auto;
-  }
-
-  /*Make text boxes wider
-  .mission {
-    max-width: 500px;
-  }
-}*/
-
 /*Desktop layout*/
 @media (min-width: 1024px) {
 
   body {
-    font-size: 20px;
-    background: lightyellow;
+    font-size: 20px; /* retain desktop font sizing, remove background override */
   }
 
   /*Keep side menu visible*/
@@ -335,10 +525,7 @@ body {
     justify-content: center;
   }
 
-  .search-icon {
-    position: absolute;
-    right: 20px;
-  }
+  /* Removed .search-icon position; search icon no longer used */
 
   /*Make trainer pic/mission statement side by side*/
   .trainer-pic {
@@ -351,6 +538,22 @@ body {
     vertical-align: top;
     max-width: 400px;
   }
+
+  /* Prevent the fixed desktop sidebar from overlapping page content.
+     Offset main page regions so they sit to the right of the sidebar. */
+  .container,
+  header,
+  footer,
+  .payment-card {
+    margin-left: 200px; /* tighter offset to match the sidebar (200px) */
+  }
+
+  /* Desktop centering for calendar page */
+  .calendar-wrap, .cal-wrap {
+    margin-left: calc(200px + (min(100vw, 1440px) - 200px - 720px)/2);
+    margin-right: auto;
+    max-width: 720px;
+  }
 }
 
 /* Services list: image left, description right; stacked vertically */
@@ -360,6 +563,25 @@ body {
   gap: 18px;
   margin-top: 12px;
 }
+
+/* FAQ styles */
+.faq-list {
+  max-width: 720px;
+  margin: 16px auto;
+  text-align: left;
+  background: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.faq-list details { margin: 8px 0; }
+.faq-list summary {
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+.faq-list summary:hover { text-decoration: underline; }
+.faq-list details > div { margin: 6px 0 10px 0; color: #444; line-height: 1.5; }
 
 .service-item {
   display: flex;
@@ -374,11 +596,12 @@ body {
 
 /* Image on the left */
 .service-img {
-  width: 160px;
-  height: 120px;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
   object-fit: cover;
   border-radius: 6px;
-  flex: 0 0 160px;
+  flex: 0 0 auto;
 }
 
 /* Description to the right */
@@ -403,18 +626,22 @@ body {
 @media (max-width: 700px) {
   .service-item {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
   }
 
   .service-img {
     width: 100%;
-    height: 180px;
+    max-width: 80%;
+    height: auto;
+    object-fit: cover;
     flex: 0 0 auto;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
   }
 
   .service-desc {
     width: 100%;
+    text-align: center;
   }
 }
 
@@ -433,8 +660,10 @@ body {
 }
 
 .owner-img {
-  width: 140px;
-  height: 140px;
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 50%;
   flex: 0 0 auto;
@@ -484,6 +713,23 @@ body {
   box-shadow: 0 6px 18px rgba(18,38,63,0.06);
 }
 
+/* Payment page header row: back button + title */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.page-header h2 { 
+  margin: 0; 
+  flex: 1 1 auto; 
+  text-align: center; 
+}
+/* Invisible clone to balance the header for perfect centering */
+.btn.invisible { visibility: hidden; }
+/* (removed) payment-row layout */
+
 .payment-form {
   display: flex;
   flex-direction: column;
@@ -517,3 +763,60 @@ body {
 
 /* Fallback: ensure small column inputs never overflow their container */
 .col.small input { max-width: 100%; }
+
+/* === Hero Header === */
+/* Hero banner section */
+.hero-banner {
+  position: relative;
+  min-height: 120px;
+  background-image: var(--hero-mobile);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-banner .menu-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: #fff;
+  z-index: 10;
+}
+
+.hero-content {
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+  padding: 20px;
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+
+/* Responsive hero heights */
+@media (min-width: 768px) {
+  .hero-banner {
+    min-height: 150px;
+    background-image: var(--hero-tablet);
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-banner {
+    min-height: 180px;
+    background-image: var(--hero-desktop);
+  }
+  .hero-title {
+    font-size: 2.25rem;
+  }
+}
